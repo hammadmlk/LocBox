@@ -1,9 +1,4 @@
 "use strict"
-var game;
-window.onload = function(){  
-game = new GameController("myCanvas");
-game.create();
-};
 
 function GameController(canvasID){
   var self = this;
@@ -18,21 +13,27 @@ function GameController(canvasID){
     self.View = new View();
     self.View.create();
     
-    /*
     //data binding by observing model
     Object.observe(self.gameModel, function(changes){
         changes.forEach(function(change) {
             console.log(change.type, change.name, change.oldValue);
+            self.View.create();
         });
     });
-    */
+    
     self.initGame();
     
   };
   
+  this._getRowCol = function (clickx, clicky ){
+     
+    }
+  
   this.onClick= function(x, y){
-    console.log(x, y);
     
+    var rowCol = self._getRow(x, y);
+    
+    var
     
     
   };
@@ -69,7 +70,7 @@ function GameModel(canvasID){
   
   this.something;
   
-  this.matrix = [[0,0,0],[0,0,0],[0,0,0]]; //[row][col] 0 = empty, 1 =cross, 2 =tick
+  this.matrix = [[0,1,2],[1,2,0],[2,2,2]]; //[row][col] 0 = empty, 1 =cross, 2 =tick
   this.playerTurn = "p1";
   this.hasWon = "none";
   
@@ -89,10 +90,24 @@ function View(){
   
   this.someUIElement;
   this.create = function(){
+    game.gameModel.context.clearRect(0, 0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
+    
     self.drawGrid(game.gameModel.context, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-    //game.gameModel.getSomething();
-    self.drawCross(game.gameModel.context, 0,0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-    self.drawTick(game.gameModel.context, 1,0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
+    
+    
+    for (var i = 0; i<game.gameModel.matrix.length; i++){
+        for (var j = 0; j<game.gameModel.matrix[i].length; j++){
+            if (game.gameModel.matrix[i][j] === 1){
+               self.drawCross(game.gameModel.context, i,j, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
+            }
+            else if (game.gameModel.matrix[i][j] ==2){
+              self.drawTick(game.gameModel.context, i,j, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
+             }
+        }
+    }
+    
+    //self.drawCross(game.gameModel.context, 0,0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
+    //self.drawTick(game.gameModel.context, 1,0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
     
   };
   
