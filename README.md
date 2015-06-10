@@ -26,3 +26,81 @@ Static folder has all the files
 > -----------/GameView.js
 
 > -----------/GameController.js
+
+##GameModel
+
+####public function
+.getCanvas()
+
+.getContext()
+
+.getCanvasWidth()
+
+.getCanvasHeight()
+
+.getWhoseTurn()
+
+.setWhoseTurn()
+
+.getMatrixVal()
+
+.setMatrixVal()
+
+.hasGameEnded()
+
+.endGame()
+
+.getWinner()
+
+
+##GameController
+
+####public function
+.create()
+
+####private function
+._initGame()
+
+._takeTurn()
+
+._whatHappenedOnThisMove()
+ 
+._getRowCol()
+ 
+._getRelativeCoordinates()
+  
+  
+  
+  
+##GameView
+
+####public function
+
+.draw()
+
+####private function
+
+._drawMatrix
+
+._drawGrid
+
+._drawLine
+
+._drawCross
+
+._drawTick
+
+._drawWhoseTurn
+
+._writeText
+
+._drawWinner
+
+
+
+## Data binding
+
+._initGame() binds the GameModel with GameView. On every chance to GameModel, the view is recreated.
+
+
+
