@@ -15,15 +15,6 @@ function GameController(canvas) {
 		self._initGame();
 	};
 
-	this._getRowCol = function (clickx, clicky) {
-  
-  };
-
-	this.onClick = function (x, y) {
-
-		var rowCol = self._getRow(x, y);
-
-	};
 
 	this._getRelativeCoords = function (event) {
 		if (event.offsetX !== undefined && event.offsetY !== undefined) {
