@@ -10,7 +10,7 @@ function GameModel(canvas) {
     
 	this._whoseTurn = 1;
 	//[row][col] 0 = empty, 1 =cross, 2 =tick
-	this._matrix = [[0, 1, 2], [1, 2, 0], [1, 0, 2]];
+	this._matrix = [[1, 1, 2], [2, 1, 1], [1, 2, 1]];
 	this._whoWon = "none";
 	this._gameEnded = false;
 
