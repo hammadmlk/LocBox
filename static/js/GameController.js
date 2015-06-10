@@ -35,7 +35,31 @@ function GameController(canvas) {
 	};
 
 	this._takeTurn = function (row, col) {
-		self._whatHappenedOnThisMove(2);
+  
+  
+    if (self.GameModel.getMatrixVal(row, col)==0){
+      
+      var whoseTurn = self.GameModel.getWhoseTurn();
+      
+      self.GameModel.setMatrixVal(row, col, whoseTurn);
+      
+      var whatHappened = self._whatHappenedOnThisMove(whoseTurn);
+      
+      if (whatHappened == "won"){
+        self.GameModel.endGame(whoseTurn);
+      }
+      else if (whatHappened == "draw"){
+        self.GameModel.endGame("none");
+      }
+      else if (whatHappened == "continueGame"){
+        //next players turn
+        self.GameModel.setWhoseTurn(1+(whoseTurn%2));
+      }
+    }
+    else{
+      console.log("cant make this move");
+    }
+    
 	};
 
 	//tells if player won or if match ended in draw.
