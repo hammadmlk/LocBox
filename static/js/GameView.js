@@ -1,47 +1,60 @@
 "use strict"
-function View() {
+function GameView(GM) {
 	var self = this;
 	this.toString = function () {
 		return "View";
 	};
 
-	this.someUIElement;
-	this.create = function () {
-		game.gameModel.context.clearRect(0, 0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
+	this.draw = function () {
+		//clear
+		GM.getContext().clearRect(0, 0, GM.getCanvasWidth, GM.getCanvasHeight);
 
-		self.drawGrid(game.gameModel.context, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-
-		for (var i = 0; i < game.gameModel.matrix.length; i++) {
-			for (var j = 0; j < game.gameModel.matrix[i].length; j++) {
-				if (game.gameModel.matrix[i][j] === 1) {
-					self.drawCross(game.gameModel.context, i, j, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-				} else if (game.gameModel.matrix[i][j] == 2) {
-					self.drawTick(game.gameModel.context, i, j, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-				}
-			}
+		//if made ended, draw winner msg
+		if (GM.hasGameEnded()) {
+			self._drawWinner();
+			return;
 		}
 
-		//self.drawCross(game.gameModel.context, 0,0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-		//self.drawTick(game.gameModel.context, 1,0, game.gameModel.canvasWidth, game.gameModel.canvasHeight);
-
-	};
-
-	this.destroy = function (data) {
-		//unload assets and vars
-	};
-
-	this.update = function () {};
-
-	this.drawGrid = function (context, canvasWidth, canvasHeight) {
-		console.log(context);
-		this._drawLine(context, 0, canvasHeight / 3, canvasWidth, canvasHeight / 3);
-		this._drawLine(context, 0, 2 * canvasHeight / 3, canvasWidth, 2 * canvasHeight / 3);
-		this._drawLine(context, canvasWidth / 3, 0, canvasWidth / 3, canvasHeight);
-		this._drawLine(context, 2 * canvasWidth / 3, 0, 2 * canvasWidth / 3, canvasHeight);
+		// otherwise draw the games current state
+		self._drawGrid();
+		self._drawMatrix();
+		self._drawWhoseTurn();
 		return;
 	};
 
-	this._drawLine = function (context, x1, y1, x2, y2, color) {
+	this._drawMatrix = function () {
+		for (var row = 0; row < 3; row++) {
+			for (var col = 0; col < 3; col++) {
+				if (GM.getMatrixVal(row, col) === 1) {
+					self._drawCross(row, col);
+				} else if (GM.getMatrixVal(row, col) == 2) {
+					self._drawTick(row, col);
+				} else {
+					//console.log(GM.getMatrixVal(row,col))
+				}
+			}
+		}
+	};
+
+	this._drawGrid = function () {
+
+		var canvasW = GM.getCanvasWidth();
+		var canvasH = GM.getCanvasHeight();
+
+		if (canvasW == 0 || canvasH == 0) {
+			throw "_drawGrid; canvas dimensions error " + canvasW + ", " + canvasH;
+		}
+
+		this._drawLine(0, canvasH / 3, canvasW, canvasH / 3);
+		this._drawLine(0, 2 * canvasH / 3, canvasW, 2 * canvasH / 3);
+		this._drawLine(canvasW / 3, 0, canvasW / 3, canvasH);
+		this._drawLine(2 * canvasW / 3, 0, 2 * canvasW / 3, canvasH);
+		return;
+	};
+
+	//draw line from x1,y1 to x2,y2
+	this._drawLine = function (x1, y1, x2, y2, color) {
+		var context = GM.getContext();
 		context.beginPath();
 		context.moveTo(x1, y1);
 		context.lineTo(x2, y2);
@@ -51,27 +64,54 @@ function View() {
 		context.stroke();
 	};
 
-	this.drawCross = function (context, row, col, canvasWidth, canvasHeight) {
+	// drawCross at row, col
+	this._drawCross = function (row, col) {
+
+		console.log(row, col);
+		var canvasWidth = GM.getCanvasWidth();
+		var canvasHeight = GM.getCanvasHeight();
+		var size = 5; //should move to model
+		var context = GM.getContext();
 
 		var crossCenterY = (canvasHeight / 6) + ((canvasHeight / 3) * col);
 		var crossCenterX = (canvasWidth / 6) + ((canvasWidth / 3) * row);
 
-		this._drawLine(context, crossCenterX - 5, crossCenterY - 5, crossCenterX + 5, crossCenterY + 5);
-		this._drawLine(context, crossCenterX - 5, crossCenterY + 5, crossCenterX + 5, crossCenterY - 5);
+		this._drawLine(crossCenterX - size, crossCenterY - size, crossCenterX + size, crossCenterY + size);
+		this._drawLine(crossCenterX - size, crossCenterY + size, crossCenterX + size, crossCenterY - size);
 
 	};
 
-	this.drawTick = function (context, row, col, canvasWidth, canvasHeight) {
+	this._drawTick = function (row, col) {
+
+		var canvasWidth = GM.getCanvasWidth();
+		var canvasHeight = GM.getCanvasHeight();
+		var size = 5; //should move to model
+		var context = GM.getContext();
+
 		var tickCenterY = (canvasHeight / 6) + ((canvasHeight / 3) * col);
 		var tickCenterX = (canvasWidth / 6) + ((canvasWidth / 3) * row);
 
-		this._drawLine(context, tickCenterX - 5, tickCenterY + 5, tickCenterX + 5, tickCenterY - 5);
-		this._drawLine(context, tickCenterX - 9, tickCenterY + 1, tickCenterX - 5, tickCenterY + 5);
+		this._drawLine(tickCenterX - size, tickCenterY + size, tickCenterX + size, tickCenterY - size);
+		this._drawLine(tickCenterX - size * 2, tickCenterY + (size / 2), tickCenterX - size, tickCenterY + size);
 
 	};
 
-	this.whoseTurnText = function (whoseTurn, canvasWidth, canvasHeight) {};
+	this._drawWhoseTurn = function () {
+		var whosTurn = GM.getWhoseTurn();
+    
+    self._writeText(" Player "+whosTurn+" turn", 0, 0, 10);
+    
+	};
 
-	this.endgameMessage = function (whoWon, canvasWidth, canvasHeight) {};
+	this._writeText = function (str, x, y, size) {
+		var context = GM.getContext();
+		context.font = size + "px Georgia";
+		context.fillText(str, x, y + size);
+
+	}
+
+	this._drawWinner = function () {
+    self._writeText("Player " + GM.getWinner() + " won.", 10, 10, 10); //todo: auto centre.
+  };
 
 };
