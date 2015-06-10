@@ -29,14 +29,52 @@ function GameController(canvas) {
 		self.GameModel.getCanvas().addEventListener('mousedown', function (evt) {
 			var coords = self._getRelativeCoordinates(evt);
 			var rowCol = self._getRowCol(coords.x, coords.y);
-      self._takeTurn(rowCol.row, rowCol.col);
+			self._takeTurn(rowCol.row, rowCol.col);
 		}, false);
 
 	};
-  
-  this._takeTurn = function(row, col){
-    
-  };
+
+	this._takeTurn = function (row, col) {
+		self._whatHappenedOnThisMove(2);
+	};
+
+	//tells if player won or if match ended in draw.
+	//Returns "won", "draw" or "continueGame"
+	this._whatHappenedOnThisMove = function (player) {
+
+		var magicMat = [[8, 3, 4], [1, 5, 9], [6, 7, 2]];
+
+		var totalSum = 0;
+		for (var row = 0; row < 3; row++) {
+			var magicSumCol = 0;
+			var magicSumRow = 0;
+			var magicSumDiag = 0;
+			var magicSumDiag2 = 0;
+
+			for (var col = 0; col < 3; col++) {
+				magicSumCol += (magicMat[row][col]) * (self.GameModel.getMatrixVal(row, col) == player);
+
+				magicSumRow += (magicMat[col][row]) * (self.GameModel.getMatrixVal(col, row) == player);
+
+				magicSumDiag += (magicMat[col][col]) * (self.GameModel.getMatrixVal(col, col) == player);
+
+				magicSumDiag2 += (magicMat[col][2 - col]) * (self.GameModel.getMatrixVal(col, 2 - col) == player);
+
+				totalSum += (magicMat[row][col] * (0 != self.GameModel.getMatrixVal(row, col)));
+
+			}
+			if (magicSumCol == 15 || magicSumRow == 15 || magicSumDiag == 15 || magicSumDiag2 == 15) {
+				return "won";
+			}
+		}
+
+		if (totalSum === 45) {
+			return "draw";
+		}
+
+		return "continueGame";
+
+	};
 
 	this._getRowCol = function (xcoordinate, ycoordinate) {
 		if (xcoordinate <= 0) {
