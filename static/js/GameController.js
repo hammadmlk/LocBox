@@ -12,19 +12,7 @@ function GameController(canvas) {
 	this.create = function () {
 		self.GameModel = new GameModel(canvas);
     self.GameView = new GameView(self.GameModel);
-    self.GameView.draw();
-    
-    return;
-		//data binding by observing model
-		Object.observe(self.gameModel, function (changes) {
-			changes.forEach(function (change) {
-				console.log(change.type, change.name, change.oldValue);
-				self.GameView.create();
-			});
-		});
-
-		self.initGame();
-
+		self._initGame();
 	};
 
 	this._getRowCol = function (clickx, clicky) {
@@ -49,15 +37,24 @@ function GameController(canvas) {
 			y : event.layerY
 		};
 	};
+  
 
-	this.initGame = function () {
+	this._initGame = function () {
 		// Models and views are created, so we can start game here.
-
+    
+    self.GameView.draw();
+    
+		//data binding by observing model
+		Object.observe(self.GameModel, function (changes) {
+      self.GameView.draw();
+		});
+    
+    /*
 		self.gameModel.canvas.addEventListener('mousedown', function (evt) {
 			var coords = self._getRelativeCoords(evt);
 			self.onClick(coords.x, coords.y);
 		}, false)
-
+    */
 	};
 
 };
