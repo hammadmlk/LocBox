@@ -111,7 +111,13 @@ function GameView(GM) {
 	}
 
 	this._drawWinner = function () {
+  
+    if (GM.getWinner()=="none"){
+      self._writeText("Draw", 10, 10, 10);
+    }
+    else{
     self._writeText("Player " + GM.getWinner() + " won.", 10, 10, 10); //todo: auto centre.
+    }
   };
 
 };
