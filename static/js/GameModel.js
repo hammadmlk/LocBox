@@ -10,7 +10,7 @@ function GameModel(canvas) {
     
 	this._whoseTurn = 1;
 	//[row][col] 0 = empty, 1 =cross, 2 =tick
-	this._matrix = [[1, 1, 2], [2, 1, 1], [1, 2, 1]];
+	this._matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 	this._whoWon = "none";
 	this._gameEnded = false;
 
@@ -46,7 +46,7 @@ function GameModel(canvas) {
 			throw "setWhoseTurn: invalid value " + player;
 			return false;
 		}
-		_self._whoseTurn = p;
+		_self._whoseTurn = player;
 		return true;
 	};
 
