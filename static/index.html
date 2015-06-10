@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="js/GameMVC.js"></script>
+    <script type="text/javascript" src="js/GameModel.js"></script>
+    <script type="text/javascript" src="js/GameView.js"></script>
+    <script type="text/javascript" src="js/GameController.js"></script>
     
     <script> 
-        var game;
-        window.onload = function(){  
-            game = new GameController("myCanvas");
-            game.create();
-        };
+    var game;
+    window.onload = function(){  
+        game = new GameController("myCanvas");
+        game.create();
+    };
     </script>
 </head>
 
