@@ -7,7 +7,7 @@ function GameView(GM) {
 
 	this.draw = function () {
 		//clear
-		GM.getContext().clearRect(0, 0, GM.getCanvasWidth, GM.getCanvasHeight);
+		GM.getContext().clearRect(0, 0, GM.getCanvasWidth(), GM.getCanvasHeight());
 
 		//if made ended, draw winner msg
 		if (GM.hasGameEnded()) {
