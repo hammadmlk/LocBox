@@ -1,25 +1,25 @@
 "use strict"
 
-function GameController(canvasID) {
+function GameController(canvas) {
 	var self = this;
 	this.toString = function () {
 		return "GameController";
 	};
 
-	this.canvasID = canvasID;
-	this.gameModel;
-	this.View;
+	this.GameModel;
+	this.GameView;
 
 	this.create = function () {
-		self.gameModel = new GameModel(self.canvasID);
-		self.View = new View();
-		self.View.create();
-
+		self.GameModel = new GameModel(canvas);
+    self.GameView = new GameView(self.GameModel);
+    self.GameView.draw();
+    
+    return;
 		//data binding by observing model
 		Object.observe(self.gameModel, function (changes) {
 			changes.forEach(function (change) {
 				console.log(change.type, change.name, change.oldValue);
-				self.View.create();
+				self.GameView.create();
 			});
 		});
 
