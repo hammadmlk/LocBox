@@ -5,8 +5,9 @@ function GameModel(canvas) {
 		return "GameModel";
 	};
 
-	this._canvas = canvas;
+	this._canvas = canvas; 
 	this._context = canvas.getContext('2d');
+    
 	this._whoseTurn = 1;
 	//[row][col] 0 = empty, 1 =cross, 2 =tick
 	this._matrix = [[0, 1, 2], [1, 2, 0], [1, 0, 2]];
@@ -14,29 +15,29 @@ function GameModel(canvas) {
 	this._gameEnded = false;
 
 	this.getCanvas = function () {
-    if (!self._context) {
-			throw "getCanvas: Canvas empty " + self._canvas;
+    if (!_self._context) {
+			throw "getCanvas: Canvas empty " + _self._canvas;
 		}
-		return self._canvas;
+		return _self._canvas;
 	};
 
 	this.getContext = function () {
-		if (!self._context) {
-			throw "getContext: context empty " + self._context;
+		if (!_self._context) {
+			throw "getContext: context empty " + _self._context;
 		}
-		return self._context;
+		return _self._context;
 	};
 
 	this.getCanvasWidth = function () {
-		return self._canvas.width;
+		return _self._canvas.width;
 	};
 
 	this.getCanvasHeight = function () {
-		return self._canvas.height;
+		return _self._canvas.height;
 	};
 
 	this.getWhoseTurn = function () {
-		return self._whoseTurn;
+		return _self._whoseTurn;
 	};
 
 	this.setWhoseTurn = function (player) {
@@ -45,7 +46,7 @@ function GameModel(canvas) {
 			throw "setWhoseTurn: invalid value " + player;
 			return false;
 		}
-		self._whoseTurn = p;
+		_self._whoseTurn = p;
 		return true;
 	};
 
@@ -54,7 +55,7 @@ function GameModel(canvas) {
 			throw "getMatrixVal: Matrix index out of bound [" + row + " ," + col + "]";
 			return false;
 		};
-		return self._matrix[row, col];
+		return _self._matrix[row][col];
 	};
 
 	this.setMatrixVal = function (row, col, val) {
@@ -67,24 +68,31 @@ function GameModel(canvas) {
 			return false;
 		};
 
-		self._matrix[row, col] = val;
+		_self._matrix[row][col] = val;
 
 		return true;
 	};
 
 	this.hasGameEnded = function () {
-		return self._gameEnded;
+		return _self._gameEnded;
 	};
 
 	this.endGame = function (winner) {
-		if (winner !== 1 && winnder !== 2 && winner !== "none") {
+		if (winner !== 1 && winner !== 2 && winner !== "none") {
 			throw "endGame: invalid winner " + winner;
 			return false;
 		};
 
-		self._whoWon = winner;
-		self._gameEnded = true;
+		_self._whoWon = winner;
+		_self._gameEnded = true;
 		return true;
 	};
+  
+  this.getWinner = function(){
+    if (_self._gameEnded)
+      return _self._whoWon;
+    
+    throw "getWinner: game was still in session "+_self._gameEnded;
+  };
 
 };
